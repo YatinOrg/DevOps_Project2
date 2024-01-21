@@ -53,7 +53,7 @@ function helper {
 expected_no_of_args = 2
 if[$# -ne $expected_no_of_args]; then
 echo "please execute the script with expected cmd args"
-echo "asd"
+echo "Example: ./script.sh arg1 arg2"
 }
 
 # Main script
