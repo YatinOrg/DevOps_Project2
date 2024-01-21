@@ -1,1 +1,89 @@
 
+
+```bash
+#!/bin/bash
+```
+- Shebang Line: This line specifies the interpreter for the script, indicating that it should be executed using the Bash shell.
+
+```bash
+######################################################################
+# About: Listing users with read access to a GitHub repository
+# Input: GitHub username and token of the person executing the script
+# Owner: Yatindra Pabbati
+# Date of Creation: 20 - 01 -2024
+# Last Date of Edit: 21 - 01 -2024
+# Modification: Helper function and metadata added
+# Contact for Issues: YatindraPabbati (GitHub)
+######################################################################
+```
+- Script Header: These comment lines provide essential information about the script, including its purpose, required input (GitHub username and token), owner's name, creation date, last edit date, details about modifications, and contact information for issues. This section serves as a detailed introduction and reference for users and developers.
+
+```bash
+# Helper Function
+function helper {
+    expected_no_of_args=2
+
+    # Check if the correct number of command-line arguments is provided
+    if [ "$#" -ne "$expected_no_of_args" ]; then
+        echo "Please execute the script with the expected command-line arguments."
+        echo "Example: ./script.sh arg1 arg2"
+        exit 1
+    fi
+}
+```
+- Helper Function: The `helper` function is designed to check if the correct number of command-line arguments is provided. If not, it displays an informative message suggesting the correct usage and exits the script with a status code of 1.
+
+```bash
+helper "$@"
+```
+- Invoke Helper Function: This line calls the `helper` function with all the command-line arguments passed to the script (`"$@"`). This ensures that the correct number of arguments is verified at the beginning of the script.
+
+```bash
+# GitHub API URL
+API_URL="https://api.github.com"
+
+# GitHub username and personal access token
+USERNAME=$1
+TOKEN=$2
+```
+- GitHub API and Authentication: These lines set the GitHub API URL and store the GitHub username and personal access token obtained from command-line arguments.
+
+```bash
+# Function to make a GET request to the GitHub API
+function github_api_get {
+    local endpoint="$1"
+    local url="${API_URL}/${endpoint}"
+
+    # Send a GET request to the GitHub API with authentication
+    curl -s -u "${USERNAME}:${TOKEN}" "$url"
+}
+```
+- GitHub API Request Function (`github_api_get`): This function takes an endpoint as an argument, constructs the complete URL, and uses `curl` to make a silent GET request to the GitHub API with authentication. The response is not displayed, allowing for further processing.
+
+```bash
+# Function to list users with read access to the repository
+function list_users_with_read_access {
+    local endpoint="repos/${REPO_OWNER}/${REPO_NAME}/collaborators"
+
+    # Fetch the list of collaborators on the repository
+    collaborators="$(github_api_get "$endpoint" | jq -r '.[] | select(.permissions.pull == true) | .login')"
+
+    # Display the list of collaborators with read access
+    if [[ -z "$collaborators" ]]; then
+        echo "No users with read access found for ${REPO_OWNER}/${REPO_NAME}."
+    else
+        echo "Users with read access to ${REPO_OWNER}/${REPO_NAME}:"
+        echo "$collaborators"
+    fi
+}
+```
+- List Users Function (`list_users_with_read_access`): This function is responsible for fetching and processing the list of collaborators with pull access from the specified GitHub repository. It utilizes the `github_api_get` function to retrieve the data and `jq` to filter and extract relevant information. The final result is displayed, indicating whether there are users with read access or not.
+
+```bash
+# Main script
+echo "Listing users with read access to ${REPO_OWNER}/${REPO_NAME}..."
+list_users_with_read_access
+```
+- Main Script Execution: This section initiates the main script. It starts by printing a message indicating the repository for which it is listing users with read access and then calls the `list_users_with_read_access` function to perform the actual listing.
+
+This detailed explanation provides a comprehensive understanding of the script, including its purpose, structure, and the functionality of each section.
