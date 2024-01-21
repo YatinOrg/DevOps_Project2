@@ -1,27 +1,38 @@
 #!/bin/bash
 
 ######################################################################
-# About : listing users with read access to a GitHub repository
-# Input : GitHub username and token of the person executing the script
-# Owner : Yatindra Pabbati
-# Date of Creation : 20 - 01 -2024
-# Last Date od Edit : 21 - 01 -2024
-# Modification : helper function and meta data added
-# Contact for Issues : YatindraPabbati (GitHub)
+# About: Listing users with read access to a GitHub repository
+# Input: GitHub username and token of the person executing the script
+# Owner: Yatindra Pabbati
+# Date of Creation: 20 - 01 -2024
+# Last Date of Edit: 21 - 01 -2024
+# Modification: Helper function and metadata added
+# Contact for Issues: YatindraPabbati (GitHub)
 ######################################################################
 
-helper()
+# Helper Function
+function helper {
+    expected_no_of_args=2
+
+    if [ "$#" -ne "$expected_no_of_args" ]; then
+        echo "Please execute the script with the expected command-line arguments."
+        echo "Example: ./script.sh arg1 arg2"
+        exit 1
+    fi
+}
+
+helper "$@"
 
 # GitHub API URL
 API_URL="https://api.github.com"
 
 # GitHub username and personal access token
-USERNAME=$username
-TOKEN=$token
+USERNAME=$1
+TOKEN=$2
 
 # User and Repository information
-REPO_OWNER=$1
-REPO_NAME=$2
+REPO_OWNER=$3
+REPO_NAME=$4
 
 # Function to make a GET request to the GitHub API
 function github_api_get {
@@ -46,14 +57,6 @@ function list_users_with_read_access {
         echo "Users with read access to ${REPO_OWNER}/${REPO_NAME}:"
         echo "$collaborators"
     fi
-}
-
-# Helper Function
-function helper {
-expected_no_of_args = 2
-if[$# -ne $expected_no_of_args]; then
-echo "please execute the script with expected cmd args"
-echo "Example: ./script.sh arg1 arg2"
 }
 
 # Main script
