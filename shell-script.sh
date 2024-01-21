@@ -1,5 +1,17 @@
 #!/bin/bash
 
+######################################################################
+# About : listing users with read access to a GitHub repository
+# Input : GitHub username and token of the person executing the script
+# Owner : Yatindra Pabbati
+# Date of Creation : 20 - 01 -2024
+# Last Date od Edit : 21 - 01 -2024
+# Modification : helper function and meta data added
+# Contact for Issues : YatindraPabbati (GitHub)
+######################################################################
+
+helper()
+
 # GitHub API URL
 API_URL="https://api.github.com"
 
@@ -34,6 +46,15 @@ function list_users_with_read_access {
         echo "Users with read access to ${REPO_OWNER}/${REPO_NAME}:"
         echo "$collaborators"
     fi
+}
+
+# Helper Function
+
+function helper{
+expected_no_of_args = 2
+if[$# -ne $expected_no_of_args]; then
+echo "please execute the script with expected cmd args"
+echo "asd"
 }
 
 # Main script
