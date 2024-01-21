@@ -49,7 +49,6 @@ function list_users_with_read_access {
 }
 
 # Helper Function
-
 function helper{
 expected_no_of_args = 2
 if[$# -ne $expected_no_of_args]; then
@@ -58,6 +57,5 @@ echo "asd"
 }
 
 # Main script
-
 echo "Listing users with read access to ${REPO_OWNER}/${REPO_NAME}..."
 list_users_with_read_access
